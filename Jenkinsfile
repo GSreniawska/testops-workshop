@@ -65,10 +65,22 @@ pipeline {
         }
         //run tests
          stage('Run tests') {
+            agent{
+                docker{
+                    image 'cypress/included:12.2.0'
+                    args '--network host --entrypoint=\'\''
+                }
+            }
             steps {
-                script {
-                    sh("echo 'hello'")
+                dir('pipline_ex/'){ 
+                    script {
+                        try{
+                            sh 'cypress run'
 
+                        }catch(err){
+                            print(err)
+                        }
+                    }
                 }
 
             }
